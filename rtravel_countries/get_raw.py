@@ -1,5 +1,8 @@
 import praw
 import json
+import sqlite3
+import time
+import datetime
 
 with open('credentials.json') as raw:
     credentials = json.load(raw)
@@ -10,3 +13,28 @@ reddit = praw.Reddit(client_id=credentials['client_id'],
                      )
 
 print("Connected to reddit: %s" % reddit.read_only)
+
+
+conn = sqlite3.connect('../data.db')
+cur = conn.cursor()
+cur.execute(''' CREATE TABLE submissions
+                (title text, score integer,
+                created_utc real, author text, num_comments integer) ''')
+
+# For testing: mine the latest weekly updates.
+# now
+timestamp_end = int(time.time())
+# a week ago
+timestamp_start = time.mktime(datetime.date(2017, 6, 1).timetuple())
+
+subreddit = reddit.subreddit('travel')
+for s in subreddit.submissions(None, timestamp_end):
+    # print(s.__dict__)
+    cur.execute('INSERT INTO submissions VALUES (?,?,?,?,?)', (
+        s.title, s.score, s.created_utc, s.author.name,
+        s.num_comments)
+    )
+
+
+conn.commit()
+conn.close()
