@@ -1,7 +1,9 @@
 import sqlite3
 import re
 
+
 re_words = re.compile("[A-Z][a-z]+")
+
 
 def guess_country(txt):
     # Extract names from txt
@@ -28,6 +30,7 @@ cur = conn.cursor()
 cur.execute("UPDATE submissions SET country=NULL")
 cur.execute("UPDATE countries SET count=0")
 
+# Prepare country names
 cur.execute("SELECT * FROM countries")
 cnames1 = cur.fetchall()
 cnames = {}
@@ -38,14 +41,24 @@ for cn in cnames1:
         "freq": cn[3]
     }
 
+# Prepare for looping
 cur.execute("SELECT rowid,* FROM submissions")
 fall = cur.fetchall()
+
+
 i = 0
 for tpl in fall:
-    print("row: %d" % i)
+
+    # Some feedback in the terminal.
+    if i % 100 == 0:
+        print("row: %d" % i)
+
     # Set a limit for testing.
-    if i >= 1000:
+    """
+    if i >= 10000:
         break
+    """
+
     country = guess_country(tpl[1])
     if country is not None:
         cnames[country]["count"] += 1
@@ -57,12 +70,14 @@ for tpl in fall:
     subm = cur.fetchone()
     i += 1
 
+
 # Store the updated cnames back to db
 for key, val in cnames.items():
     conn.execute(str.format(
         "UPDATE countries SET count=%d WHERE name='%s'" %
         (val["count"], key)
     ))
+
 
 conn.commit()
 conn.close()
