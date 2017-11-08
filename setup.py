@@ -9,6 +9,6 @@ setup(
     author_email='kristjan.voje@gmail.com',
     licence='MIT',
     packages=['rtravel_countries'],
-    install_requires=['praw', 'sqlite3'],
+    install_requires=['praw', 'beautifulsoup4'],
     zip_safe=False
 )
