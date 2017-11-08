@@ -34,7 +34,7 @@ submissions
 
 countries
 
-|original_name|alt_names|count|freq|
+|name|alt_names|count|freq|
 |---|---|---|---|
 |text|text|integer|real|
 
