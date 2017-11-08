@@ -27,9 +27,9 @@ Loop through every post from reddit and assign it a country.
 ## data.db
 submissions
 
-|title   |score   |created_utc   |author   |num_comments   |
-|---|---|---|---|---|
-|text|integer|real|text|integer|
+|title   |score   |created_utc   |author   |num_comments   |country|
+|---|---|---|---|---|---|
+|text|integer|real|text|integer|text|
 
 
 countries
