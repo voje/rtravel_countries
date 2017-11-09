@@ -19,7 +19,8 @@ conn = sqlite3.connect('../data.db')
 cur = conn.cursor()
 cur.execute(''' CREATE TABLE submissions
                 (title text, score integer,
-                created_utc real, author text, num_comments integer) ''')
+                created_utc real, author text,
+                num_comments integer, country text) ''')
 
 # For testing: mine the latest weekly updates.
 # now
@@ -28,11 +29,11 @@ timestamp_end = int(time.time())
 timestamp_start = time.mktime(datetime.date(2017, 6, 1).timetuple())
 
 subreddit = reddit.subreddit('travel')
-for s in subreddit.submissions(None, timestamp_end):
+for s in subreddit.submissions(timestamp_start, timestamp_end):
     # print(s.__dict__)
-    cur.execute('INSERT INTO submissions VALUES (?,?,?,?,?)', (
+    cur.execute('INSERT INTO submissions VALUES (?,?,?,?,?,?)', (
         s.title, s.score, s.created_utc, s.author.name,
-        s.num_comments)
+        s.num_comments, 0)
     )
 
 
