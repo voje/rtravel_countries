@@ -6,10 +6,11 @@ I'll be using the following tools:
     * PRAW (Reddit API)
     * beautifulsoup4 (Web scraper)
 * SqLite (simple database)
-* D3JS (data visualization)
+* D3JS (data visualization)  
 
-## Python code
 Packing everything into a python package for easier install.  
+
+## Getting the data
 You should be in the innermost `rtravel_countries` directory when running these scripts so the relative path to the SQLite DB is `../data.db`. 
 
 ### get_raw.py
@@ -40,3 +41,14 @@ Tables in the database:
 |---|---|---|---|
 |text|text|integer|real|
 
+
+## Visualizing the data
+I'll be using Flask to server my data.  
+Server in `/flask_app`.  
+
+## Python shenanigans
+I've had some trouble with the flask app seeing all the functinos in rtravel_contries package.  
+
+* Accidently installed the package globally. After making changes to the package, the old (global) was still imported.  
+* After making changes in package, I needed to run `pip install --upgrade .` on my package.  
+* Seems that it's best to install custon packages in virtualenv.  
