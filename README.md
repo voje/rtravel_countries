@@ -62,4 +62,8 @@ $ export FLASK_APP="app.py"
 $ flask run
 ```
 
-## TODO: get data from /data/countries into js, display charts
+## TODO: 
+* I was able to match about 1/4 of all titles with a specific country. 
+Possible improvements. Levenshein distance?  
+* Add search for a specific country score.  (nationalism and stuff...)
+* Add a time range filter.  

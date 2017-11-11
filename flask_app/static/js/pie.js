@@ -13,23 +13,24 @@ function get_data(_callback) {
 function draw_chart() {
     cdata = crossfilter(data)
 
-    num_dim = cdata.dimension((d) => { return d.count })
-    num_dim.filter((d) => { return d > 0 })
+    // Filter out countries with 0 hits.
+    dim_num = cdata.dimension((d) => { return d.count })
+    dim_num.filter((d) => { return d > 0 })
 
-    name_dim = cdata.dimension((d) => { return d.name })
-    var grp = name_dim.group()
+    dim_name = cdata.dimension((d) => { return d.name })
+    grp_count = dim_name.group().reduceSum( (d) => {return d.count} )
 
     var chart = dc.pieChart("#pie-chart")
     chart
         .width(1000)
-        .height(700)
+        .height(600)
         .slicesCap(30)
         .innerRadius(100)
-        .externalLabels(50)
-        .externalRadiusPadding(100)
-        .drawPaths(true)
-        .dimension(name_dim)
-        .group(name_dim.group().reduceSum((d)=>{return d.count}))
+        //.externalLabels(100)
+        //.externalRadiusPadding(0)
+        //.drawPaths(false)
+        .dimension(dim_name)
+        .group(grp_count)
         .legend(dc.legend());
     // example of formatting the legend via svg
     // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment

@@ -29,7 +29,9 @@ timestamp_end = int(time.time())
 timestamp_start = time.mktime(datetime.date(2017, 6, 1).timetuple())
 
 subreddit = reddit.subreddit('travel')
-for s in subreddit.submissions(timestamp_start, timestamp_end):
+# Set first argument to None if you want to scrape all posts since
+# the beginning of /r/Travel
+for s in subreddit.submissions(None, timestamp_end):
     # print(s.__dict__)
     cur.execute('INSERT INTO submissions VALUES (?,?,?,?,?,?)', (
         s.title, s.score, s.created_utc, s.author.name,
