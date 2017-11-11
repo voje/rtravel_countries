@@ -1,20 +1,35 @@
-$("#pie-chart").text("Hello from Pie chart!")
-/*
-var chart = dc.pieChart("#pie-chart");
-d3.csv("morley.csv", function(error, experiments) {
-    var ndx           = crossfilter(experiments),
-        runDimension  = ndx.dimension(function(d) {return "run-"+d.Run;})
-    speedSumGroup = runDimension.group().reduceSum(function(d) {return d.Speed * d.Run;});
+var data = null
+var cdata = null
+
+get_data(draw_chart)
+
+function get_data(_callback) {
+    d3.json("/data/countries", (d) => {
+        data = d
+        _callback()
+    })
+}
+
+function draw_chart() {
+    cdata = crossfilter(data)
+
+    num_dim = cdata.dimension((d) => { return d.count })
+    num_dim.filter((d) => { return d > 0 })
+
+    name_dim = cdata.dimension((d) => { return d.name })
+    var grp = name_dim.group()
+
+    var chart = dc.pieChart("#pie-chart")
     chart
-        .width(768)
-        .height(480)
-        .slicesCap(4)
+        .width(1000)
+        .height(700)
+        .slicesCap(30)
         .innerRadius(100)
         .externalLabels(50)
-        .externalRadiusPadding(50)
+        .externalRadiusPadding(100)
         .drawPaths(true)
-        .dimension(runDimension)
-        .group(speedSumGroup)
+        .dimension(name_dim)
+        .group(name_dim.group().reduceSum((d)=>{return d.count}))
         .legend(dc.legend());
     // example of formatting the legend via svg
     // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
@@ -24,10 +39,9 @@ d3.csv("morley.csv", function(error, experiments) {
           .append('tspan')
             .text(function(d) { return d.name; })
           .append('tspan')
-            .attr('x', 100)
+            .attr('x', 150)
             .attr('text-anchor', 'end')
             .text(function(d) { return d.data; });
     });
     chart.render();
-});
-*/
+}

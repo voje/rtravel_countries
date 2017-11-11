@@ -21,5 +21,10 @@ def data_contries():
         dbname="../data.db", table="countries")
 
 
+@app.route("/raw")
+def raw():
+    return render_template("raw.html")
+
+
 if __name__ == "__main__":
     app.run()
