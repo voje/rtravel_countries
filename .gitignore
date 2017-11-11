@@ -1,3 +1,4 @@
 data.db
 rtravel_countries/credentials.json
 venv/
+flask_app/static/node_modules/

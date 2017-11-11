@@ -52,3 +52,14 @@ I've had some trouble with the flask app seeing all the functinos in rtravel_con
 * Accidently installed the package globally. After making changes to the package, the old (global) was still imported.  
 * After making changes in package, I needed to run `pip install --upgrade .` on my package.  
 * Seems that it's best to install custon packages in virtualenv.  
+
+## Starting flask:
+From root directory:  
+```bash
+$ source venv/bin/activate`
+$ cd flask_app
+$ export FLASK_APP="app.py"
+$ flask run
+```
+
+## TODO: get data from /data/countries into js, display charts
