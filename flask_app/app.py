@@ -26,5 +26,10 @@ def raw():
     return render_template("raw.html")
 
 
+@app.route("/test")
+def test():
+    return render_template("test.html")
+
+
 if __name__ == "__main__":
     app.run()

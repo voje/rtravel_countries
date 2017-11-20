@@ -6,7 +6,10 @@ I'll be using the following tools:
     * PRAW (Reddit API)
     * beautifulsoup4 (Web scraper)
 * SqLite (simple database)
-* D3JS (data visualization)  
+* JS
+    * Crossfilter
+    * D3JS
+    * DC.js
 
 Packing everything into a python package for easier install.  
 
@@ -61,6 +64,37 @@ $ cd flask_app
 $ export FLASK_APP="app.py"
 $ flask run
 ```
+
+
+## Crossfilter
+The library has a bit of a learning curve.  
+It's used to quickly order multidimensional data and gropu in in your browser.  
+Sort of like a browser-side SQL query.  
+Basic steps:
+```javascript
+data = [
+    {day: "2017-01-15", score: 20},
+    {day: "2017-01-22", score: 50},
+    {day: "2017-02-13", score: 60}
+]
+
+//read data into a crossfilter object
+var cdata = crossfilter(data)
+
+//define dimensions
+var dim_day = cdata.dimension((d)=>{ return d.day })
+var dim_scr = cdata.dimension((d)=>{ return d.score })
+
+//define groups
+var grp_by_month = dim_day.group((d)=>{ return d.substr(1,7) })
+
+//perform aggregation on gropus
+var score_per_month = grp_by_month.reduceSum((d)=>{ d.score })
+```
+
+Quick recap on 26 slides: [link](https://www.slideshare.net/esjewett/crossfilter-mad-js)  
+
+
 
 ## TODO: 
 * I was able to match about 1/4 of all titles with a specific country. 
