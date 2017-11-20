@@ -37,8 +37,7 @@ cnames = {}
 for cn in cnames1:
     cnames[cn[0]] = {
         "alts": cn[1].split(', '),
-        "count": cn[2],
-        "freq": cn[3]
+        "count": cn[2]
     }
 
 # Prepare for looping
@@ -72,6 +71,8 @@ for tpl in fall:
 
 
 # Store the updated cnames back to db
+# Note: we may not need the count attribute; aggregation
+# possible with JavaScript in browser (Crossfilter library)
 for key, val in cnames.items():
     conn.execute(str.format(
         "UPDATE countries SET count=%d WHERE name='%s'" %

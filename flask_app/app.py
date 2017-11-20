@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import render_template
 from rtravel_countries import sqlite_to_json
+import sqlite3
+import json
 
 
 app = Flask(__name__)
@@ -21,9 +23,26 @@ def data_contries():
         dbname="../data.db", table="countries")
 
 
-@app.route("/raw")
-def raw():
-    return render_template("raw.html")
+@app.route("/data/submissions1")
+def data_submissions():
+    conn = sqlite3.connect("../data.db")
+    conn.row_factory = sqlite3.Row
+
+    cur = conn.cursor()
+    cur.execute(str.format("""
+        SELECT created_utc, country
+        FROM submissions
+        WHERE country NOT NULL
+    """))
+
+    rows = cur.fetchall()
+
+    json_dump = json.dumps([dict(x) for x in rows])
+
+    conn.commit()
+    conn.close()
+
+    return json_dump
 
 
 @app.route("/test")

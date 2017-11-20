@@ -1,83 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>rtravel_countries</title>
-  <link rel="stylesheet" href="./static/lib/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./static/lib/css/keen-dashboards.css">
-  <link rel="stylesheet" href="./static/node_modules/dc/dc.css">
-</head>
-<body class="application">
+    <head>
+        <meta charset="UTF-8">
+        <title>title</title>
+        <link rel="stylesheet" href="./static/node_modules/dc/dc.css">
+    </head>
+    <body>
+        <div id="pie-chart"></div>  
+        <div id="bar-chart"></div>  
 
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="./">Dashboard</a>
-      </div>
-    </div>
-  </div>
+        <script src="./static/node_modules/dc/node_modules/crossfilter2/crossfilter.js"></script>
+        <script src="./static/node_modules/dc/node_modules/d3/d3.js"></script>
+        <script src="./static/node_modules/dc/dc.js"></script>
 
-  <div class="container-fluid">
-
-    <div class="row">
-
-      <div class="col-sm-6">
-        <div class="row">
-
-          <div class="col-sm-12">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Cell Title
-              </div>
-              <div class="chart-stage">
-                <div id="pie-chart"></div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="col-sm-6">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Cell Title
-          </div>
-          <div class="chart-stage">
-            <img data-src="holder.js/100%x324/white/text:100x324">
-          </div>
-          <div class="chart-notes">
-            Notes about this chart
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-    <hr>
-    <p class="small text-muted">Built with &#9829; by <a href="https://keen.io">Keen IO</a></p>
-
-  </div>
-
-  <script src="./static/lib/js/jquery.min.js"></script>
-  <script src="./static/lib/js/bootstrap.min.js"></script>
-  <script src="./static/lib/js/holder.js"></script>
-
-  <!--my stuff-->
-  <script src="./static/node_modules/dc/node_modules/crossfilter2/crossfilter.js"></script>
-  <script src="./static/node_modules/dc/node_modules/d3/d3.js"></script>
-  <script src="./static/node_modules/dc/dc.js"></script>
-
-  <script>
-    Holder.add_theme("white", { background:"#fff", foreground:"#a7a7a7", size:10 });
-  </script>
-
-  <script src="./static/lib/js/keen.min.js"></script>
-  <script src="./static/lib/js/meta.js"></script>
-
-  <!--my stuff-->
-  <script src="./static/js/pie.js"></script>
-
-</body>
+        <script src="./static/js/charts.js"></script>
+    </body>
 </html>
