@@ -1,5 +1,7 @@
 var data = null
 var cdata = null
+var pie
+var bar
 
 get_data(draw_chart)
 
@@ -10,9 +12,14 @@ function get_data(_callback) {
     })
 }
 
+window.reset_filter = function() {
+    bar.filter(null)
+    bar.render()
+}
+
 function draw_chart() {
-    var pie = dc.pieChart("#pie-chart")
-    var bar = dc.barChart("#bar-chart")
+    pie = dc.pieChart("#pie-chart")
+    bar = dc.barChart("#bar-chart")
     cdata = crossfilter(data)
 
     // UTC to Date
@@ -33,11 +40,10 @@ function draw_chart() {
     var count_cntry = grp_cntry.reduceCount()
     var count_per_month = grp_time.reduceCount()
 
-console.log(data)
     pie
         //.width(1000)
-        .height(550)
-        .slicesCap(30)
+        .height(450)
+        .slicesCap(25)
         //.innerRadius(100)
         //.externalLabels(100)
         .externalRadiusPadding(50)
