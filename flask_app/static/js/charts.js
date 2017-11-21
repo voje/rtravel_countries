@@ -1,7 +1,6 @@
 var data = null
 var cdata = null
-var pie
-var bar
+var charts = []
 
 get_data(draw_chart)
 
@@ -12,15 +11,29 @@ function get_data(_callback) {
     })
 }
 
-window.reset_filter = function() {
-    bar.filter(null)
-    bar.render()
+reset_filters = function() {
+    charts.forEach((d)=> {
+        d.filter(null)
+    })
+}
+
+render_all = function() {
+    charts.forEach((d)=> {
+        d.render()
+    })
+}
+
+window.reset_all = function() {
+    reset_filters()
+    render_all()
 }
 
 function draw_chart() {
-    pie = dc.pieChart("#pie-chart")
-    bar = dc.barChart("#bar-chart")
+    charts[0] = dc.pieChart("#pie-chart")
+    charts[1] = dc.barChart("#bar-chart")
     cdata = crossfilter(data)
+
+    console.log(charts)
 
     // UTC to Date
     data.forEach((d)=>{
@@ -40,7 +53,7 @@ function draw_chart() {
     var count_cntry = grp_cntry.reduceCount()
     var count_per_month = grp_time.reduceCount()
 
-    pie
+    charts[0] 
         //.width(1000)
         .height(450)
         .slicesCap(25)
@@ -53,8 +66,8 @@ function draw_chart() {
         .legend(dc.legend())
     // example of formatting the legend via svg
     // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
-    pie.on('pretransition', function(chart) {
-        pie.selectAll('.dc-legend-item text')
+    charts[0].on('pretransition', function(chart) {
+        charts[0].selectAll('.dc-legend-item text')
             .text('')
           .append('tspan')
             .text(function(d) { return d.name; })
@@ -63,16 +76,15 @@ function draw_chart() {
             .attr('text-anchor', 'end')
             .text(function(d) { return d.data; })
     })
-    pie.render()
-
 
     var min_max = d3.extent(data, (d)=>{ return d.created_utc }) 
 
-    bar
+    charts[1]
       .dimension(dim_time)
       .group(count_per_month)
       .x(d3.time.scale()
         .domain([ min_max[0], min_max[1] ])
         )
-    bar.render()
+
+    render_all()
 }

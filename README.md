@@ -48,6 +48,8 @@ Tables in the database:
 ## Visualizing the data
 I'll be using Flask to server my data.  
 Server in `/flask_app`.  
+You need to install some node modules. Actually one. Go to `/flask_app/static/`.  
+Run `$ npm install dc`. All set.  
 
 ## Python shenanigans
 I've had some trouble with the flask app seeing all the functinos in rtravel_contries package.  
