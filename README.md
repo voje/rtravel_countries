@@ -13,6 +13,28 @@ I'll be using the following tools:
 
 Packing everything into a python package for easier install.  
 
+Setup steps:
+```bash
+# From repo root, set up virtualenv.
+$ virtualenv ./venv
+$ source ./venv/bin/activate
+
+# Install with -e, so pip creates a symlink instead of copying files.
+# (handy for deveopment)
+$ pip install . -e
+
+# Install dc node module.
+$ cd ./flask_app/static
+$ npm install dc
+
+$ cd ..
+# Should be in flask_app folder now.
+$ export FLASK_APP=app.py
+$ flask run
+
+# Browser should now display ./static/templates/index.html on localhost:5000.  
+```
+
 ## Getting the data
 You should be in the innermost `rtravel_countries` directory when running these scripts so the relative path to the SQLite DB is `../data.db`. 
 

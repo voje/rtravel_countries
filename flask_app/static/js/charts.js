@@ -43,6 +43,7 @@ function count_all(data) {
 function draw_chart() {
     charts[0] = dc.pieChart("#pie-chart")
     charts[1] = dc.barChart("#bar-chart")
+    charts[2] = dc.seriesChart("#series-chart")
     cdata = crossfilter(data)
 
     // UTC to Date
@@ -67,7 +68,7 @@ function draw_chart() {
         //.width(1000)
         .height(450)
         .slicesCap(25)
-        .cx(400)
+        .cx(400)        //x offset
         //.innerRadius(100)
         //.externalLabels(100)
         .externalRadiusPadding(50)
@@ -106,6 +107,11 @@ function draw_chart() {
       .x(d3.time.scale()
         .domain([ min_max[0], min_max[1] ])
         )
+
+    charts[2]
+        .dimension(dim_time)
+        .group(count_per_month)
+        //TODO
 
     render_all()
 }
