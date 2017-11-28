@@ -2,6 +2,10 @@ var data = null
 var cdata = null
 var charts = []
 
+// for debugging
+var tm
+
+// Main
 get_data(draw_chart)
 
 function get_data(_callback) {
@@ -28,12 +32,18 @@ window.reset_all = function() {
     render_all()
 }
 
+function count_all(data) {
+    var all = 0
+    data.forEach( (d) => {
+        all += d.value
+    })
+    return all
+}
+
 function draw_chart() {
     charts[0] = dc.pieChart("#pie-chart")
     charts[1] = dc.barChart("#bar-chart")
     cdata = crossfilter(data)
-
-    console.log(charts)
 
     // UTC to Date
     data.forEach((d)=>{
@@ -57,6 +67,7 @@ function draw_chart() {
         //.width(1000)
         .height(450)
         .slicesCap(25)
+        .cx(400)
         //.innerRadius(100)
         //.externalLabels(100)
         .externalRadiusPadding(50)
@@ -67,14 +78,24 @@ function draw_chart() {
     // example of formatting the legend via svg
     // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
     charts[0].on('pretransition', function(chart) {
+        var percent_helper = 0
         charts[0].selectAll('.dc-legend-item text')
             .text('')
           .append('tspan')
             .text(function(d) { return d.name; })
           .append('tspan')
-            .attr('x', 150)
+            .attr('x', 120)
             .attr('text-anchor', 'end')
-            .text(function(d) { return d.data; })
+            .text(function(d) {
+                percent_helper += d.data
+                return d.data
+            })
+          .append('tspan')
+            .attr('x', 130)
+            .attr('text-anchor', 'start')
+            .text(function(d) { 
+                return ( "(" + ( 100*d.data/percent_helper ).toFixed(1) + "%)" )
+            })
     })
 
     var min_max = d3.extent(data, (d)=>{ return d.created_utc }) 
