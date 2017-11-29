@@ -17,6 +17,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/index_series.html")
+def index_series():
+    return render_template("index_series.html")
+
+
 @app.route("/data/countries")
 def data_contries():
     return sqlite_to_json.dump_json(
@@ -48,6 +53,11 @@ def data_submissions():
 @app.route("/test")
 def test():
     return render_template("test.html")
+
+
+@app.route("/test_series")
+def test_series():
+    return render_template("test_series.html")
 
 
 if __name__ == "__main__":

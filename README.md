@@ -118,10 +118,24 @@ var score_per_month = grp_by_month.reduceSum((d)=>{ d.score })
 
 Quick recap on 26 slides: [link](https://www.slideshare.net/esjewett/crossfilter-mad-js)  
 
+## DC.js
+This is a powerful visualization library, sitting on Crossfilter and D3.js. 
+
+### series
+Had some trouble here. Seems you have to define a 2D dimension, with both date and class (country).  
+I also want the date dimension to be goruped by months. Used `d3.time.month()` function to round the date to the nearest month.  
+```javascript
+// from working example test_series.js (localhost:5000/test_series)
+var dim_series = cdata.dimension((d) => {
+    return [d.class, d3.time.month(d.registered)]
+})
+var grp_scores = dim_series.group().reduceCount((d) => {
+    return d.class
+})
+```
 
 
 ## TODO: 
 * I was able to match about 1/4 of all titles with a specific country. 
-Possible improvements. Levenshein distance?  
-* Add search for a specific country score.  (nationalism and stuff...)
-* Add a time range filter.  
+* Possible improvements. Levenstein distance?  
+* For static view, export data into json, change data load functions.  
