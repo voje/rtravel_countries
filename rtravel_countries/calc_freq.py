@@ -1,13 +1,30 @@
 import sqlite3
 import re
+from nltk import everygrams
+from nltk import word_tokenize
 
-
-re_words = re.compile("[A-Z][a-z]+")
+re_capital = re.compile('[A-Z][a-z,A-Z]+')
 
 
 def guess_country(txt):
+    global alts
     # Extract names from txt
-    names = re_words.findall(txt)
+
+    # First, split by punctuations
+    snt = re.split('[.,?!;]', txt)
+    ngrsnt = []
+    # Then, tokenize
+    for s in snt:
+        if len(s) <= 1:
+            continue
+        tks = word_tokenize(s)
+        # Keep the ngrams that start with a capital word
+        ngrsnt += [
+            x for x in everygrams(tks, max_len=4) if re_capital.match(x[0])
+        ]
+
+    # transpose everything to lower case, join tokens into strings
+    names = [(" ".join(x)).lower() for x in ngrsnt]
 
     # Iterate original names
     for key, val in cnames.items():
@@ -18,6 +35,8 @@ def guess_country(txt):
     for key, val in cnames.items():
         for alt in val["alts"]:
             if alt in names:
+                alts = alts + 1
+                print(alt)
                 return key
 
     return None
@@ -49,8 +68,10 @@ i = 0
 for tpl in fall:
 
     # Some feedback in the terminal.
+    """
     if i % 100 == 0:
         print("row: %d" % i)
+    """
 
     # Set a limit for testing.
     """
@@ -79,6 +100,7 @@ for key, val in cnames.items():
         (val["count"], key)
     ))
 
+print(alts)
 
 conn.commit()
 conn.close()
