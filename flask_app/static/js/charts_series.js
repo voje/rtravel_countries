@@ -3,7 +3,9 @@ var cdata = null
 var charts = []
 
 // for debugging
-var tm
+var tm1
+var tm2
+var tm3
 
 console.time("main")
 
@@ -75,19 +77,23 @@ function draw_chart() {
     // UTC to Date
     console.time("data_utc_time")
     data.forEach((d)=>{
-        // convert to Date format + round to month
-        d.created_utc = d3.time.month(new Date(d.created_utc * 1000))
+        // convert to Date format + round to month + convert back to int representation
+        // !!! using int instead of Date object is a huge performance boost for crossfilter !!!
+        d.created_utc = d3.time.month(new Date(d.created_utc * 1000)).getTime()
     })
     console.timeEnd("data_utc_time")
 
     console.time("dim_series")
-    //huge bottlenect (50s)
-    // TODO write your own reduce function to optimize the bottleneck
-    // graph date-value while mapping to countries in a dictionary cntry: [indices]
-    var dim_series = cdata.dimension((d) => { return [d.created_utc, d.country] })
+    console.time("iter")
+    var dim_series = cdata.dimension((d) => {
+        //Each iteration is constant (cca 0.35ms). This will scale with data.  
+        //Iterations represent 1/3 of processing time. 2/3 is the time the function
+        //needs from last iteration to exit. 
+        return [d.created_utc, d.country] 
+    })
     console.timeEnd("dim_series")
-    var grp_series = dim_series.group().reduceCount((d) => { return d.country })
-    tm = grp_series
+    //var grp_series = dim_series.group().reduceCount((d) => { return d.country })
+    var grp_series = dim_series.group()
 
     console.time("minmax")
     var min_max = d3.extent(data, (d)=>{ return d.created_utc }) 
@@ -95,6 +101,7 @@ function draw_chart() {
 
     // series chart
     charts[0]
+        .title((d) => { return "[" + new Date(d.key[0]).toDateString() + ", " + d.key[1] + "]: " + d.value })
         .colors(d3.scale.category20())
         .yAxisLabel("hits per month")
         .x(d3.time.scale()

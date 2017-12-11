@@ -79,11 +79,21 @@ function draw_chart() {
     // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
     charts[0].on('pretransition', function(chart) {
         var percent_helper = 0
+        var idx = 0
         charts[0].selectAll('.dc-legend-item text')
             .text('')
-          .append('tspan')
-            .text(function(d) { return d.name; })
-          .append('tspan')
+            .append('tspan')
+            .text(function(d) { 
+                idx++
+                var sidx = "" + idx
+                var str = ""
+                if (sidx.length < 2) {
+                    str += " "
+                }
+                str += sidx + ". " + d.name
+                return str
+            })
+            .append('tspan')
             .attr('x', 120)
             .attr('text-anchor', 'end')
             .text(function(d) {

@@ -91,8 +91,10 @@ $ flask run
 
 
 ## Crossfilter
+***Do not use Date objects in dimensions. It significantly slows the performance.***  
+***Use <Date object>.getTime(). For int representation of dates.***  
 The library has a bit of a learning curve.  
-It's used to quickly order multidimensional data and gropu in in your browser.  
+It's used to quickly order multidimensional data and group it in the browser.  
 Sort of like a browser-side SQL query.  
 Basic steps:
 ```javascript
