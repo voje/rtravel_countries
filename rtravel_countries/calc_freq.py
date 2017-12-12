@@ -111,7 +111,7 @@ for tpl in fall:
 
 # Display statistics.
 for key, val in hits.items():
-    print(key + ": " + str(val))
+    print("%10s: %d" % (key, str(val)))
 tmp = hits["none"]
 print("Matched %d out of %d (%f%%)." % (i - tmp, i, (i - tmp) / i))
 

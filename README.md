@@ -50,8 +50,7 @@ Better version, scrapes sovereighn state names, capitals, big cities and alterna
 ### calc_freq.py
 Loop through every post title in `DB: submissions` and find a reference to a country. Leave NULL if no reference found. 
 
-Results:  
-matched 36249 out of 122524 submissions (29.6%)  
+Matches found for 46% of titles.  
 
 ## data.db
 Tables in the database: 
@@ -64,7 +63,7 @@ Tables in the database:
 
 
 ## Visualizing the data
-I'll be using Flask to server my data.  
+I'll be using Flask to serve my data.  
 Server in `/flask_app`.  
 You need to install some node modules. Actually one. Go to `/flask_app/static/`.  
 Run `$ npm install dc`. All set.  
@@ -72,9 +71,10 @@ Run `$ npm install dc`. All set.
 ## Python shenanigans
 I've had some trouble with the flask app seeing all the functinos in rtravel_contries package.  
 
-* Accidently installed the package globally. After making changes to the package, the old (global) was still imported.  
-* After making changes in package, I needed to run `pip install --upgrade .` on my package.  
-* Seems that it's best to install custon packages in virtualenv.  
+* Accidently installed the package globally. After making changes to the package, the old (global) was still used.  
+* After making changes in package, I needed to run `pip install --upgrade .` on my repo.  
+* Seems that it's best to install custon packages in virtualenv, also install the repo packages using  
+`pip install . -e`. It will create symlinks instead of copying data.  
 
 ## Starting flask:
 From root directory:  
@@ -131,9 +131,3 @@ var grp_scores = dim_series.group().reduceCount((d) => {
     return d.class
 })
 ```
-
-
-## TODO: 
-* I was able to match about 1/4 of all titles with a specific country. 
-* Possible improvements. Levenstein distance?  
-* For static view, export data into json, change data load functions.  
