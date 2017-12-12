@@ -1,4 +1,0 @@
-praw
-beautifulsoup4
-flask
-nltk
