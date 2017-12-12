@@ -41,8 +41,11 @@ You should be in the innermost `rtravel_countries` directory when running these 
 ### get_raw.py
 This will use Reddit API to fetch data about every post ever created on /r/Travel. Storing the data into `../data.db`.
 
-### scrape_countries.py
+### scrape_countries.py (deprecated)
 There are a number of (free) existing databases with mappings of countries, cities and states. But I like to catch my data in the wilds. So let's scrape Wikipedia for a list of country names along with a few lists of alternative names. 
+
+### scrape_countries1.py
+Better version, scrapes sovereighn state names, capitals, big cities and alternative names. Saves the python dict in a pickle `countries.pickle`.  
 
 Note: there's some ambiguity regarding the names of North Korea (under Korea, North on one wiki page) and some other countries. I'll leave it at that for now, fine tune later if necessary. 
 
