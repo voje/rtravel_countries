@@ -29,7 +29,7 @@ def data_contries():
 
 
 @app.route("/data/submissions1")
-def data_submissions(to_file=False):
+def data_submissions1():
     conn = sqlite3.connect("../data.db")
     conn.row_factory = sqlite3.Row
 
@@ -45,10 +45,6 @@ def data_submissions(to_file=False):
     json_dump = json.dumps([dict(x) for x in rows])
 
     # Use this to dump to file.
-    if (False):
-        with open("../data.json", "w") as file:
-            file.write(json_dump)
-
     conn.commit()
     conn.close()
 

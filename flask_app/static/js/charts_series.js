@@ -51,7 +51,6 @@ function count_all(data) {
 }
 
 function draw_chart() {
-    console.time("draw_chart")
     charts[0] = dc.seriesChart("#series-chart")
     cdata = crossfilter(data)
 
@@ -60,44 +59,48 @@ function draw_chart() {
     var filter_countries = []
     var dim_filter_countries = cdata.dimension((d) => { return d.country })
 
-    console.time("dim_filter_countries1")
+    // Remove "united states" data.
+    dim_filter_countries.filterFunction((d)=>{ return d == "united states" })
+    cdata.remove()
+    dim_filter_countries.filter(null) // remove this filter
+
     dim_filter_countries.group().reduceCount().top(20).forEach((d) => {
         filter_countries.push(d.key)
     })
-    console.timeEnd("dim_filter_countries1")
-    console.time("dim_filter_countries2")
+
+    console.log(filter_countries)
+
     dim_filter_countries.filterFunction((d) => {
         return filter_countries.indexOf(d) < 0  // filter all that are NOT in the list
     })
-    console.timeEnd("dim_filter_countries2")
     cdata.remove() // remove everything that matches the current filter
     dim_filter_countries.filterAll() //reset filter
 
 
     // UTC to Date
-    console.time("data_utc_time")
     data.forEach((d)=>{
         // convert to Date format + round to month + convert back to int representation
         // !!! using int instead of Date object is a huge performance boost for crossfilter !!!
         d.created_utc = d3.time.month(new Date(d.created_utc * 1000)).getTime()
     })
-    console.timeEnd("data_utc_time")
 
-    console.time("dim_series")
-    console.time("iter")
     var dim_series = cdata.dimension((d) => {
         //Each iteration is constant (cca 0.35ms). This will scale with data.  
         //Iterations represent 1/3 of processing time. 2/3 is the time the function
         //needs from last iteration to exit. 
         return [d.created_utc, d.country] 
     })
-    console.timeEnd("dim_series")
     //var grp_series = dim_series.group().reduceCount((d) => { return d.country })
     var grp_series = dim_series.group()
 
-    console.time("minmax")
     var min_max = d3.extent(data, (d)=>{ return d.created_utc }) 
-    console.timeEnd("minmax")
+
+    // Sort legend alphabetically. 
+    dc.override(charts[0], 'legendables', function() {
+        var items = charts[0]._legendables();
+        console.log(items)
+        return items.sort((a,b) => { return a < b });
+    });
 
     // series chart
     charts[0]
@@ -121,13 +124,10 @@ function draw_chart() {
             .gap(5)
             .legendWidth(1000) 
             .horizontal(1)
-            .itemWidth(100)
+            .itemWidth(180)
         )
         .margins().bottom = 120
 
 
     render_all()
-    console.timeEnd("draw_chart")
 }
-
-console.timeEnd("main")

@@ -47,11 +47,11 @@ There are a number of (free) existing databases with mappings of countries, citi
 ### scrape_countries1.py
 Better version, scrapes sovereighn state names, capitals, big cities and alternative names. Saves the python dict in a pickle `countries.pickle`.  
 
-Note: there's some ambiguity regarding the names of North Korea (under Korea, North on one wiki page) and some other countries. I'll leave it at that for now, fine tune later if necessary. 
-
 ### calc_freq.py
 Loop through every post title in `DB: submissions` and find a reference to a country. Leave NULL if no reference found. 
-For now it simply matches all stored country names with the title text. No fancy netural language processing - possible update though.  
+
+Results:  
+matched 36249 out of 122524 submissions (29.6%)  
 
 ## data.db
 Tables in the database: 
@@ -61,13 +61,6 @@ Tables in the database:
 |title   |score   |created_utc   |author   |num_comments   |country|
 |---|---|---|---|---|---|
 |text|integer|real|text|integer|text|
-
-
-* countries
-
-|name|alt_names|count|freq|
-|---|---|---|---|
-|text|text|integer|real|
 
 
 ## Visualizing the data

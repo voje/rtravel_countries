@@ -1,3 +1,5 @@
+# Script deprecated, use scrape_countries1.py
+
 import requests
 from bs4 import BeautifulSoup
 import sqlite3

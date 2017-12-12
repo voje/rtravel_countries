@@ -67,7 +67,7 @@ function draw_chart() {
         //.width(1000)
         .height(450)
         .slicesCap(25)
-        .cx(400)        //x offset
+        .cx(435)        //x offset
         //.innerRadius(100)
         //.externalLabels(100)
         .externalRadiusPadding(50)
@@ -94,14 +94,14 @@ function draw_chart() {
                 return str
             })
             .append('tspan')
-            .attr('x', 120)
+            .attr('x', 200)
             .attr('text-anchor', 'end')
             .text(function(d) {
                 percent_helper += d.data
                 return d.data
             })
           .append('tspan')
-            .attr('x', 130)
+            .attr('x', 220)
             .attr('text-anchor', 'start')
             .text(function(d) { 
                 return ( "(" + ( 100*d.data/percent_helper ).toFixed(1) + "%)" )

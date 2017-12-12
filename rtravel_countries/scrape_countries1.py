@@ -75,6 +75,7 @@ for table in wikitables:
 # Add US states, since reddit is a US website.
 # I'm going to do the blasphemous deed of appending all the states
 # as an alternative name for United States of America
+"""
 states = []
 soup = BeautifulSoup(
     requests.get(
@@ -92,35 +93,23 @@ for r in rows[2:]:
     states += [th[0].find("a").text]
 
 cnames["United States"]["alt_n"] += states
+"""
+
+# Convert everything to lower case.
+lcnames = {}
+for key, val in cnames.items():
+    lcnames[key.lower()] = {
+        "capital": (val["capital"]).lower(),
+        "other_ct": [x.lower() for x in val["other_ct"]],
+        "alt_n": [x.lower() for x in val["alt_n"]]
+    }
 
 # Pickle this file
 with open("../countries.pickle", "wb") as file:
-    pickle.dump(cnames, file, -1)
+    pickle.dump(lcnames, file, -1)
 
+"""
 # For loading:
 with open("../countries.pickle", "rb") as file:
     cnames1 = pickle.load(file)
-print(cnames1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+"""

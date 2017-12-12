@@ -1,13 +1,24 @@
+# This script processes 'submissions' table and
+# adds a country class to each entry.
+
 import sqlite3
 import re
 from nltk import everygrams
 from nltk import word_tokenize
+import _pickle as pickle
 
-re_capital = re.compile('[A-Z][a-z,A-Z]+')
+
+hits = {
+    "name": 0,
+    "capital": 0,
+    "alt_n": 0,
+    "other_ct": 0,
+    "none": 0
+}
 
 
 def guess_country(txt):
-    global alts
+    re_capital = re.compile('[A-Z][a-z,A-Z]+')
     # Extract names from txt
 
     # First, split by punctuations
@@ -26,19 +37,35 @@ def guess_country(txt):
     # transpose everything to lower case, join tokens into strings
     names = [(" ".join(x)).lower() for x in ngrsnt]
 
-    # Iterate original names
+    # Iterate cnames table, find a match.
+    # Match name.
     for key, val in cnames.items():
         if key in names:
+            hits["name"] += 1
             return key
 
-    # Iterate alt names
+    # Match capital.
     for key, val in cnames.items():
-        for alt in val["alts"]:
-            if alt in names:
-                alts = alts + 1
-                print(alt)
+        if val["capital"] in names:
+            hits["capital"] += 1
+            return key
+
+    # Match alt names.
+    for key, val in cnames.items():
+        for altn in val["alt_n"]:
+            if altn in names:
+                hits["alt_n"] += 1
                 return key
 
+    # Match big cities.
+    for key, val in cnames.items():
+        for city in val["other_ct"]:
+            if city in names:
+                hits["other_ct"] += 1
+                return key
+
+    # No match found.
+    hits["none"] += 1
     return None
 
 
@@ -47,31 +74,21 @@ cur = conn.cursor()
 
 # Clear the tables before reapplying results
 cur.execute("UPDATE submissions SET country=NULL")
-cur.execute("UPDATE countries SET count=0")
 
 # Prepare country names
-cur.execute("SELECT * FROM countries")
-cnames1 = cur.fetchall()
-cnames = {}
-for cn in cnames1:
-    cnames[cn[0]] = {
-        "alts": cn[1].split(', '),
-        "count": cn[2]
-    }
+with open("../countries.pickle", "rb") as file:
+    cnames = pickle.load(file)
 
-# Prepare for looping
+# Prepare for looping (add row id info for reinserting information)
 cur.execute("SELECT rowid,* FROM submissions")
 fall = cur.fetchall()
 
 
 i = 0
 for tpl in fall:
-
     # Some feedback in the terminal.
-    """
     if i % 100 == 0:
         print("row: %d" % i)
-    """
 
     # Set a limit for testing.
     """
@@ -80,8 +97,9 @@ for tpl in fall:
     """
 
     country = guess_country(tpl[1])
+
+    # Insert into DB
     if country is not None:
-        cnames[country]["count"] += 1
         cur.execute(str.format(
             "UPDATE submissions SET country='%s' WHERE rowid=%d" %
             (country, tpl[0])
@@ -91,16 +109,11 @@ for tpl in fall:
     i += 1
 
 
-# Store the updated cnames back to db
-# Note: we may not need the count attribute; aggregation
-# possible with JavaScript in browser (Crossfilter library)
-for key, val in cnames.items():
-    conn.execute(str.format(
-        "UPDATE countries SET count=%d WHERE name='%s'" %
-        (val["count"], key)
-    ))
-
-print(alts)
+# Display statistics.
+for key, val in hits.items():
+    print(key + ": " + str(val))
+tmp = hits["none"]
+print("Matched %d out of %d (%f%%)." % (i - tmp, i, (i - tmp) / i))
 
 conn.commit()
 conn.close()

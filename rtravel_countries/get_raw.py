@@ -1,12 +1,16 @@
+# Scrape reddit's r/Travel using reddit API (praw)
+
 import praw
 import json
 import sqlite3
 import time
 import datetime
 
+# API credentials
 with open('credentials.json') as raw:
     credentials = json.load(raw)
 
+# Login
 reddit = praw.Reddit(client_id=credentials['client_id'],
                      client_secret=credentials['client_secret'],
                      user_agent=credentials['user_agent']
@@ -14,7 +18,7 @@ reddit = praw.Reddit(client_id=credentials['client_id'],
 
 print("Connected to reddit: %s" % reddit.read_only)
 
-
+# Prepare database
 conn = sqlite3.connect('../data.db')
 cur = conn.cursor()
 cur.execute(''' CREATE TABLE submissions
